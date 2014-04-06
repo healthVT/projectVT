@@ -23,11 +23,11 @@ public class resultActivity extends Activity {
 
         int vitamenRate = 1000;
         Bundle extra = getIntent().getExtras();
-        String vitamenA = extra.getCharSequence("vitamenA").toString();
+        int vitamenA = extra.getInt("vitamenA");
         CharSequence resultChar;
 
-        if(vitamenA != null){
-            int resultVitamenA = vitamenRate - Integer.parseInt(vitamenA);
+        if(vitamenA != 0){
+            int resultVitamenA = vitamenRate - vitamenA;
             if(resultVitamenA > 0){
                 resultChar = "GO TAKE MORE VITAMEN A!!!!!!!!!!!!!! FUCKER~";
             }else{
