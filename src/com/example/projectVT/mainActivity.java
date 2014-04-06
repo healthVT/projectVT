@@ -12,8 +12,11 @@ public class mainActivity extends Activity {
      * Called when the activity is first created.
      */
     View.OnClickListener submitListener;
+    View.OnClickListener showInfoListener;
     Button submitButton;
+    Button showInforTable;
     RadioGroup genderRadio;
+    TableLayout infoTable;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,27 @@ public class mainActivity extends Activity {
 
             }
         };
+
+        showInfoListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                if(infoTable.getVisibility() == TableLayout.GONE){
+                    infoTable.setVisibility(TableLayout.VISIBLE);
+                    showInforTable.setText("Hide Personal Info");
+                }else{
+                    infoTable.setVisibility(TableLayout.GONE);
+                    showInforTable.setText("Show Personal Info");
+                }
+
+
+            }
+        };
+
+
+        infoTable = (TableLayout) findViewById(R.id.userInfoTable);
+
+        showInforTable = (Button) findViewById(R.id.showInfoTable);
+        showInforTable.setOnClickListener(showInfoListener);
 
         submitButton = (Button) findViewById(R.id.submitButton);
         submitButton.setOnClickListener(submitListener);

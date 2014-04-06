@@ -2,50 +2,34 @@
 
 <RelativeLayout
         android:layout_width="fill_parent"
+        android:animateLayoutChanges="true"
         android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Please Enter Your Daily Viatmen A"
-            android:id="@+id/titleText" android:layout_alignParentTop="true" android:layout_alignParentStart="true"
-            android:layout_marginLeft="22dp" android:layout_marginTop="21dp"/>
 
-    <EditText android:id="@+id/viatmenInput"
-              android:layout_width="150dp"
-              android:layout_height="wrap_content"
-              android:layout_below="@+id/titleText"
-              android:layout_marginTop="30dp"
-              android:layout_centerHorizontal="true"
-              android:maxLength="5"
-              android:inputType="number"
-              />
-    <TextView android:id="@+id/unitText"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_toRightOf="@+id/viatmenInput"
-              android:layout_below="@+id/titleText"
-              android:layout_marginTop="39dp"
-              android:layout_marginLeft="10dp"
-              android:textSize="21dp"
-              android:text="Gram"
-              />
+    <Button android:id="@+id/showInfoTable"
+            android:text="Enter my information"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            />
+
     <TableLayout android:id="@+id/userInfoTable"
-                 android:layout_below="@+id/unitText"
+                 android:layout_below="@+id/showInfoTable"
                  android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
                  android:layout_marginTop="20dp"
-                 >
+                 android:background="#3D3D3D"
+                 android:visibility="gone"
+            >
         <TableRow android:id="@+id/infoFirstRow"
                   android:layout_height="wrap_content"
                   android:layout_width="fill_parent"
-                  >
+                >
             <TextView android:id="@+id/heightText"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:text="Height"
                       android:textSize="20dp"
-                      />
+                    />
             <EditText android:id="@+id/ftInput"
                       android:layout_width="80dp"
                       android:layout_height="wrap_content"
@@ -54,7 +38,7 @@
                       android:layout_marginRight="5dp"
                       android:maxLength="4"
                       android:inputType="number"
-                      />
+                    />
             <TextView android:id="@+id/ftText"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -122,12 +106,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_span="4"
-                        >
+                    >
                 <RadioButton android:id="@+id/maleButton"
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"
                              android:text="MALE"
-                             />
+                        />
                 <RadioButton android:id="@+id/femaleButton"
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"
@@ -138,10 +122,40 @@
 
         </TableRow>
     </TableLayout>
-    <Button android:id="@+id/submitButton"
+
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userInfoTable"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Please Enter Your Daily Viatmen A"
+            android:id="@+id/titleText"
+            android:layout_marginLeft="22dp" android:layout_marginTop="21dp"/>
+
+    <EditText android:id="@+id/viatmenInput"
+              android:layout_width="150dp"
+              android:layout_height="wrap_content"
+              android:layout_below="@+id/titleText"
+              android:layout_marginTop="30dp"
+              android:layout_centerHorizontal="true"
+              android:maxLength="5"
+              android:inputType="number"
+              />
+    <TextView android:id="@+id/unitText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toRightOf="@+id/viatmenInput"
+              android:layout_below="@+id/titleText"
+              android:layout_marginTop="39dp"
+              android:layout_marginLeft="10dp"
+              android:textSize="21dp"
+              android:text="Gram"
+              />
+
+    <Button android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/unitText"
             android:text="Let go next step"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="24dp"
