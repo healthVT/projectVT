@@ -22,7 +22,7 @@ public class mainActivity extends Activity {
     TableLayout infoTable;
     LinearLayout vitaminList;
     List<Integer> vitaminArray = new ArrayList<Integer>();
-    //testing change on git
+    //testing change on git test
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
