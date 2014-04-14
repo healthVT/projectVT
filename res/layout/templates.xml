@@ -14,8 +14,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/buttonBackground"
+                android:textColor="@color/buttonTextAvaliable"/>
+
+        <Button android:id="@+id/todayButton"
+                android:text="Today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/buttonBackground"
                 android:textColor="@color/buttonTextAvaliable"
+                android:layout_toEndOf="@+id/historyButton"
+            />
+
+        <Button android:id="@+id/shareButton"
+                android:text="Share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/buttonBackground"
+                android:textColor="@color/buttonTextAvaliable"
+                android:layout_toEndOf="@+id/todayButton"
                 />
+
+        <Button android:id="@+id/moreButton"
+                android:text="More"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/buttonBackground"
+                android:textColor="@color/buttonTextAvaliable"
+                android:layout_toEndOf="@+id/shareButton"
+                />
+
+        //add today (go back to main)
+        //add social media share (fb, twitter...)
+        //add info (inventor, coder)
+
     </RelativeLayout>
 
 </merge>
