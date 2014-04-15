@@ -21,6 +21,8 @@ public class resultActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result);
 
+        //create vitA_RDA_database
+        //read required vitA via inputs (BMI, age, disease,...)
         int vitamenRate = 1000;
         Bundle extra = getIntent().getExtras();
         int vitamenA = extra.getInt("vitamenA");
@@ -36,6 +38,8 @@ public class resultActivity extends Activity {
         }else{
             resultChar = "FUCKER!! ENTER A NUMBER.";
         }
+        //save value to vitA_ID_database
+
 
         TextView resultText = (TextView) findViewById(R.id.resultText);
         resultText.setText(resultChar);

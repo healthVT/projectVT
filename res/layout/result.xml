@@ -18,4 +18,10 @@
             android:text="Back"
             android:textSize="30dp"
             />
+
+    //create a chart
+    //create calander
+    //plot VitA_ID_database and Day
+
+    <include layout="@layout/templates" />
 </RelativeLayout>

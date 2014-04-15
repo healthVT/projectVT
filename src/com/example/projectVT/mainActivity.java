@@ -19,6 +19,7 @@ public class mainActivity extends Activity {
     TextView infoText;
     EditText nameField, viatmenInput, ftText, inText, weightText, vitaminText;
     RadioGroup genderRadio;
+    //add healthcondition spinnerSelect
     TableLayout infoTable;
     LinearLayout vitaminList;
     List<Integer> vitaminArray = new ArrayList<Integer>();
@@ -28,7 +29,7 @@ public class mainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-
+        //add healthcondition spinnerSelect
         /** Listener **/
         submitListener = new View.OnClickListener() {
             @Override

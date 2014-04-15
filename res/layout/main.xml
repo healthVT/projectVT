@@ -159,6 +159,13 @@
                                 />
                     </RadioGroup>
 
+                    //add scroll bar to add health_condition(spnnerselect)
+                    //add id=healthcondition
+                    <string-array name="healthcondition">
+                        <item>pregnancy</item>
+                        //add more health items in the future (from literature)
+                    </string-array>
+
                 </TableRow>
             </TableLayout>
 
