@@ -12,7 +12,9 @@
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:animateLayoutChanges="true"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
             <RelativeLayout android:id="@+id/nameRelativeLayout"
                             android:layout_width="wrap_content"
@@ -149,12 +151,14 @@
                         <RadioButton android:id="@+id/maleButton"
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
+                                     android:tag="MALE"
                                      android:text="MALE"
                                 />
                         <RadioButton android:id="@+id/femaleButton"
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:layout_marginLeft="30dp"
+                                     android:tag="FEMALE"
                                      android:text="FEMALE"
                                 />
                     </RadioGroup>
@@ -244,5 +248,5 @@
 
         </RelativeLayout>
     </ScrollView>
-    <include layout="@layout/templates" />
+    <include layout="@layout/bottom_menu_template" />
 </RelativeLayout>
