@@ -71,4 +71,6 @@ public class UserInfo {
     }
 
     public String getGender(){ return gender; }
+
+    public long getId(){ return id; }
 }

@@ -11,6 +11,7 @@ import android.widget.*;
 import java.util.List;
 import java.util.ArrayList;
 import com.example.projectVT.sqlite.helper.UserInfo;
+import com.example.projectVT.sqlite.helper.VitaminLog;
 import com.example.projectVT.sqlite.model.DatabaseHelper;
 
 public class mainActivity extends Activity {
@@ -75,6 +76,13 @@ public class mainActivity extends Activity {
                 intent.putExtra("in", inInput);
                 intent.putExtra("weight", weightInput);
                 intent.putExtra("gender", genderInput);
+                Log.e("in", String.valueOf(user.getId()));
+                if(user != null){
+                    Log.e("in", String.valueOf(user.getId()));
+
+                    //for testing
+                    db.updateVitaminLog(new VitaminLog(1, "Apple", 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1, 11.1));
+                }
 
                 startActivityForResult(intent, 0);
 
@@ -133,6 +141,7 @@ public class mainActivity extends Activity {
 
         //setup user info if the user already entered information
         String userName = sharedData.getString("projectVT.userName", null);
+
         if(userName != null){
             setUserInfoText(userName);
             infoText.setVisibility(TextView.VISIBLE);
@@ -151,7 +160,10 @@ public class mainActivity extends Activity {
     }
 
     private void setUserInfoText(String userName){
-        UserInfo user = db.getUser(userName);
+        if(user == null){
+            user = db.getUser(userName);
+        }
+
         if(user != null){
             nameField.setText(user.getName());
             ftText.setText(String.valueOf(user.getFeet()));
