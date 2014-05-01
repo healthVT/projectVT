@@ -10,7 +10,6 @@ import android.os.IBinder;
 public class mainService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-
         return Service.START_NOT_STICKY;
     }
 

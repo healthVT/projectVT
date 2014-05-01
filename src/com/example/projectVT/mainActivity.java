@@ -8,11 +8,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+
 import java.util.List;
 import java.util.ArrayList;
+
+import com.example.projectVT.service.mainService;
 import com.example.projectVT.sqlite.helper.UserInfo;
 import com.example.projectVT.sqlite.helper.VitaminLog;
 import com.example.projectVT.sqlite.model.DatabaseHelper;
+import com.example.projectVT.util.projectVTServer;
+import org.json.JSONObject;
 
 public class mainActivity extends Activity {
     /**
@@ -22,7 +27,8 @@ public class mainActivity extends Activity {
     View.OnFocusChangeListener setTableListener;
     Button submitButton, plusButton;
     TextView infoText;
-    EditText nameField, viatmenInput, ftText, inText, weightText, vitaminText;
+    EditText nameField, ftText, inText, weightText, vitaminText;
+    AutoCompleteTextView foodInput;
     RadioGroup genderRadio;
     TableLayout infoTable;
     LinearLayout vitaminList;
@@ -30,7 +36,8 @@ public class mainActivity extends Activity {
     DatabaseHelper db;
     UserInfo user;
     SharedPreferences sharedData;
-    //testing change on git
+    ArrayAdapter<String> adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +50,7 @@ public class mainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 submitButton.setEnabled(false);
-                vitaminText = (EditText) findViewById(R.id.viatmenInput);
+                vitaminText = (EditText) findViewById(R.id.foodInput);
                 RadioButton genderText = (RadioButton) findViewById(genderRadio.getCheckedRadioButtonId());
 
                 CharSequence gender = "";
@@ -81,7 +88,7 @@ public class mainActivity extends Activity {
                     Log.e("in", String.valueOf(user.getId()));
 
                     //for testing
-                    db.updateVitaminLog(new VitaminLog(1, "Apple", 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1, 11.1));
+                    db.updateVitaminLog(new VitaminLog(user.getId(), "Apple", 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1, 11.1));
                 }
 
                 startActivityForResult(intent, 0);
@@ -122,8 +129,8 @@ public class mainActivity extends Activity {
         nameField = (EditText) findViewById(R.id.nameField);
         nameField.setOnFocusChangeListener(setTableListener);
 
-        viatmenInput = (EditText) findViewById(R.id.viatmenInput);
-        viatmenInput.setOnFocusChangeListener(setTableListener);
+        foodInput = (AutoCompleteTextView) findViewById(R.id.foodInput);
+        foodInput.setOnFocusChangeListener(setTableListener);
 
         submitButton = (Button) findViewById(R.id.submitButton);
         submitButton.setOnClickListener(submitListener);
@@ -148,6 +155,20 @@ public class mainActivity extends Activity {
         }else{
             nameField.requestFocus();
         }
+
+        //call util to get http response
+        projectVTServer server = new projectVTServer();
+        try{
+            JSONObject jsonResult = server.execute("http://localhost:8080/projectVTServer/food/getFoodList").get();
+            String[] foodList = jsonResult.get("foodList").toString().split(",");
+            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, foodList);
+            foodInput.setAdapter(adapter);
+
+        }catch(Exception e){
+            Log.e("Project VT Server exception ", "Exception", e);
+        }
+
+
 
     }
 
@@ -217,8 +238,10 @@ public class mainActivity extends Activity {
 
     }
 
+
+
     private void addTextToView(){
-        CharSequence vitaminChar = viatmenInput.getText();
+        CharSequence vitaminChar = foodInput.getText();
         TextView eachText = new TextView(this);
         eachText.setText(vitaminChar);
         eachText.setLayoutParams(new LinearLayout.LayoutParams(
@@ -226,7 +249,7 @@ public class mainActivity extends Activity {
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
 
-        viatmenInput.setText("");
+        foodInput.setText("");
         vitaminList.addView(eachText, 0);
 
         vitaminArray.add(Integer.parseInt(vitaminChar.toString()));
