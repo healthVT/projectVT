@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ import com.example.projectVT.sqlite.helper.UserInfo;
 import com.example.projectVT.sqlite.helper.VitaminLog;
 import com.example.projectVT.sqlite.model.DatabaseHelper;
 import com.example.projectVT.util.projectVTServer;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class mainActivity extends Activity {
@@ -32,11 +34,12 @@ public class mainActivity extends Activity {
     RadioGroup genderRadio;
     TableLayout infoTable;
     LinearLayout vitaminList;
-    List<Integer> vitaminArray = new ArrayList<Integer>();
+    List<String> vitaminArray = new ArrayList<String>();
     DatabaseHelper db;
     UserInfo user;
     SharedPreferences sharedData;
     ArrayAdapter<String> adapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class mainActivity extends Activity {
                 int totalVitaminA = 0;
                 //CharSequence vitaminInput = vitaminText.getText();
                 for(int i=0;i<vitaminArray.size();i++){
-                    totalVitaminA += vitaminArray.get(i);
+                    //totalVitaminA += vitaminArray.get(i);
                 }
 
                 CharSequence ftInput = ftText.getText();
@@ -88,7 +91,7 @@ public class mainActivity extends Activity {
                     Log.e("in", String.valueOf(user.getId()));
 
                     //for testing
-                    db.updateVitaminLog(new VitaminLog(user.getId(), "Apple", 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1, 11.1));
+                    //db.updateVitaminLog(new VitaminLog(user.getId(), "Apple", 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1, 11.1));
                 }
 
                 startActivityForResult(intent, 0);
@@ -157,9 +160,9 @@ public class mainActivity extends Activity {
         }
 
         //call util to get http response
-        projectVTServer server = new projectVTServer();
         try{
-            JSONObject jsonResult = server.execute("http://localhost:8080/projectVTServer/food/getFoodList").get();
+            projectVTServer server = new projectVTServer();
+            JSONObject jsonResult = server.execute("http://www.jjtemp.com/projectVTServer/food/getFoodList").get();
             String[] foodList = jsonResult.get("foodList").toString().split(",");
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, foodList);
             foodInput.setAdapter(adapter);
@@ -241,21 +244,50 @@ public class mainActivity extends Activity {
 
 
     private void addTextToView(){
-        CharSequence vitaminChar = foodInput.getText();
-        TextView eachText = new TextView(this);
-        eachText.setText(vitaminChar);
-        eachText.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
+        try{
+            projectVTServer server = new projectVTServer();
+            CharSequence vitaminInput = foodInput.getText();
+            String vitaminChar = vitaminInput.toString() + ":\n";
 
-        foodInput.setText("");
-        vitaminList.addView(eachText, 0);
+            JSONObject resultJSON = server.execute("http://www.jjtemp.com/projectVTServer/food/getVitaminByFood/?foodName=" + vitaminInput.toString()).get();
+            resultJSON = resultJSON.getJSONObject("vitamin");
 
-        vitaminArray.add(Integer.parseInt(vitaminChar.toString()));
+            Iterator<?> keys = resultJSON.keys();
+            while(keys.hasNext()){
+                String key = (String) keys.next();
+                vitaminChar += vitaminResultString(resultJSON, key);
+            }
+
+            TextView eachText = new TextView(this);
+            eachText.setText(vitaminChar);
+            eachText.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+
+            foodInput.setText("");
+            vitaminList.addView(eachText, 0);
+
+            vitaminArray.add(vitaminChar.toString());
+        }catch(Exception e){
+            Log.e("add text exception", "exception" , e);
+        }
+
 
     }
 
+    private String vitaminResultString(JSONObject vitamin, String name){
+        String vitaminString = "";
+
+        try{
+            if(vitamin.get(name) != null && vitamin.get(name).toString() != "0.0"){
+                vitaminString = " " + name.toUpperCase() + ": " + vitamin.get(name);
+            }
+        }catch(JSONException e){
+            Log.e("JSONException", "Exception", e);
+        }
+        return vitaminString;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){

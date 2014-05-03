@@ -24,7 +24,7 @@ public class projectVTServer extends AsyncTask<String, Integer, JSONObject> {
             HttpClient httpclient = new DefaultHttpClient();
 
             HttpGet request = new HttpGet();
-            URI serverAPI = new URI("http://10.0.2.2:8080/projectVTServer/food/getFoodList");
+            URI serverAPI = new URI(urls[0]);
             request.setURI(serverAPI);
             HttpResponse response = httpclient.execute(request);
 
