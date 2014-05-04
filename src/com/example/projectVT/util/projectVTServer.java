@@ -17,14 +17,14 @@ import java.net.URL;
  * Created by Jay on 4/29/14.
  */
 public class projectVTServer extends AsyncTask<String, Integer, JSONObject> {
+    protected final String host = "http://www.jjtemp.com/projectVTServer/";
 
     protected JSONObject doInBackground(String... urls){
         JSONObject json = null;
         try{
             HttpClient httpclient = new DefaultHttpClient();
-
             HttpGet request = new HttpGet();
-            URI serverAPI = new URI(urls[0]);
+            URI serverAPI = new URI(host + urls[0]);
             request.setURI(serverAPI);
             HttpResponse response = httpclient.execute(request);
 
@@ -40,4 +40,6 @@ public class projectVTServer extends AsyncTask<String, Integer, JSONObject> {
 
         return json;
     }
+
+
 }

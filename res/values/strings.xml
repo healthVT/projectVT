@@ -2,4 +2,15 @@
 <resources>
     <string name="app_name">projectVT</string>
     <string name="result_name">Vitamen Result</string>
+
+    <string name="quality_prompt">Select Quality</string>
+    <string-array name="quality">
+        <item>1/4</item>
+        <item>1/2</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>

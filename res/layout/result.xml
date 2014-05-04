@@ -3,12 +3,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+    <TextView android:id="@+id/resultTitle"
+              android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:text="You still leak some Vitamin:"
+              android:textSize="20dp"
+              />
     <TextView android:id="@+id/resultText"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginTop="22dp"
+              android:layout_below="@+id/resultTitle"
               android:textSize="20dp"
               />
+    <ImageView android:id="@+id/loadingImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/resultText"
+            />
 
     <Button android:id="@+id/resultBackButton"
             android:layout_width="wrap_content"

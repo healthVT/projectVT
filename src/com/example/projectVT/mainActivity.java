@@ -9,13 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-
-import com.example.projectVT.service.mainService;
 import com.example.projectVT.sqlite.helper.UserInfo;
-import com.example.projectVT.sqlite.helper.VitaminLog;
 import com.example.projectVT.sqlite.model.DatabaseHelper;
 import com.example.projectVT.util.projectVTServer;
 import org.json.JSONException;
@@ -25,20 +19,21 @@ public class mainActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
-    View.OnClickListener submitListener, plusListener;
-    View.OnFocusChangeListener setTableListener;
-    Button submitButton, plusButton;
-    TextView infoText;
-    EditText nameField, ftText, inText, weightText, vitaminText;
-    AutoCompleteTextView foodInput;
-    RadioGroup genderRadio;
-    TableLayout infoTable;
-    LinearLayout vitaminList;
-    List<String> vitaminArray = new ArrayList<String>();
-    DatabaseHelper db;
-    UserInfo user;
-    SharedPreferences sharedData;
-    ArrayAdapter<String> adapter;
+    private View.OnClickListener submitListener, plusListener;
+    private View.OnFocusChangeListener setTableListener;
+    private Button submitButton, plusButton;
+    private TextView infoText;
+    private EditText nameField, ftText, inText, weightText, vitaminText;
+    private AutoCompleteTextView foodInput;
+    private RadioGroup genderRadio;
+    private TableLayout infoTable;
+    private LinearLayout vitaminList;
+    private String inputFoodList;
+    private DatabaseHelper db;
+    private UserInfo user;
+    private SharedPreferences sharedData;
+    private ArrayAdapter<String> adapter;
+    private Spinner amountSpinner;
 
 
     @Override
@@ -53,44 +48,15 @@ public class mainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 submitButton.setEnabled(false);
-                vitaminText = (EditText) findViewById(R.id.foodInput);
-                RadioButton genderText = (RadioButton) findViewById(genderRadio.getCheckedRadioButtonId());
 
-                CharSequence gender = "";
-
-                if(genderText != null){
-                    gender = genderText.getText();
-                }
-
-                int totalVitaminA = 0;
-                //CharSequence vitaminInput = vitaminText.getText();
-                for(int i=0;i<vitaminArray.size();i++){
-                    //totalVitaminA += vitaminArray.get(i);
-                }
-
-                CharSequence ftInput = ftText.getText();
-                CharSequence inInput = inText.getText();
-                CharSequence weightInput = weightText.getText();
-                CharSequence genderInput = gender;
 
                 Intent intent = new Intent(mainActivity.this, resultActivity.class);
 
-                if(totalVitaminA == 0 || ftInput.length() == 0 || inInput.length() == 0 || weightInput.length() == 0){
-                    Toast.makeText(getApplicationContext(), "FUCKER!! ENTER ALL OF NUMBERS.", Toast.LENGTH_LONG).show();
-                    submitButton.setEnabled(true);
-                    return;
-                }
+                intent.putExtra("foodList", inputFoodList);
+                intent.putExtra("gender", user.getGender());
 
-                intent.putExtra("vitamenA", totalVitaminA);
-                intent.putExtra("ft", ftInput);
-                intent.putExtra("in", inInput);
-                intent.putExtra("weight", weightInput);
-                intent.putExtra("gender", genderInput);
                 Log.e("in", String.valueOf(user.getId()));
                 if(user != null){
-                    Log.e("in", String.valueOf(user.getId()));
-
-                    //for testing
                     //db.updateVitaminLog(new VitaminLog(user.getId(), "Apple", 2.1, 3.1, 4.1, 5.1, 6.1, 7.1, 8.1, 9.1, 10.1, 11.1));
                 }
 
@@ -149,6 +115,12 @@ public class mainActivity extends Activity {
         plusButton = (Button) findViewById(R.id.plusButton);
         plusButton.setOnClickListener(plusListener);
 
+        //Spinner
+        amountSpinner = (Spinner) findViewById(R.id.amount);
+
+        inputFoodList = "";
+
+
         //setup user info if the user already entered information
         String userName = sharedData.getString("projectVT.userName", null);
 
@@ -162,7 +134,7 @@ public class mainActivity extends Activity {
         //call util to get http response
         try{
             projectVTServer server = new projectVTServer();
-            JSONObject jsonResult = server.execute("http://www.jjtemp.com/projectVTServer/food/getFoodList").get();
+            JSONObject jsonResult = server.execute("food/getFoodList").get();
             String[] foodList = jsonResult.get("foodList").toString().split(",");
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, foodList);
             foodInput.setAdapter(adapter);
@@ -249,14 +221,20 @@ public class mainActivity extends Activity {
             CharSequence vitaminInput = foodInput.getText();
             String vitaminChar = vitaminInput.toString() + ":\n";
 
-            JSONObject resultJSON = server.execute("http://www.jjtemp.com/projectVTServer/food/getVitaminByFood/?foodName=" + vitaminInput.toString()).get();
+            JSONObject resultJSON = server.execute("food/getVitaminByFood/?foodName=" + vitaminInput.toString()).get();
             resultJSON = resultJSON.getJSONObject("vitamin");
 
-            Iterator<?> keys = resultJSON.keys();
-            while(keys.hasNext()){
-                String key = (String) keys.next();
-                vitaminChar += vitaminResultString(resultJSON, key);
-            }
+            vitaminChar += vitaminResultString(resultJSON, "a");
+            vitaminChar += vitaminResultString(resultJSON, "b1");
+            vitaminChar += vitaminResultString(resultJSON, "b2");
+            vitaminChar += vitaminResultString(resultJSON, "b3");
+            vitaminChar += vitaminResultString(resultJSON, "b6");
+            vitaminChar += vitaminResultString(resultJSON, "b12");
+            vitaminChar += vitaminResultString(resultJSON, "c");
+            vitaminChar += vitaminResultString(resultJSON, "d");
+            vitaminChar += vitaminResultString(resultJSON, "e");
+            vitaminChar += vitaminResultString(resultJSON, "k");
+
 
             TextView eachText = new TextView(this);
             eachText.setText(vitaminChar);
@@ -268,13 +246,32 @@ public class mainActivity extends Activity {
             foodInput.setText("");
             vitaminList.addView(eachText, 0);
 
-            vitaminArray.add(vitaminChar.toString());
+            String amount = getAmountInString(amountSpinner.getSelectedItem().toString());
+            String common = "";
+            if(!inputFoodList.equals("")){
+                common =",";
+            }
+            inputFoodList += common + vitaminInput.toString() + ":" + amount;
+
         }catch(Exception e){
             Log.e("add text exception", "exception" , e);
         }
 
 
     }
+
+    private String getAmountInString(String amount){
+        if(amount.equals("1/4")){
+            return "0.25";
+        }else if(amount.equals("1/2")){
+            return "0.5";
+        }else{
+            return amount;
+        }
+
+    }
+
+
 
     private String vitaminResultString(JSONObject vitamin, String name){
         String vitaminString = "";

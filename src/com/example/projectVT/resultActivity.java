@@ -3,10 +3,17 @@ package com.example.projectVT;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.example.projectVT.util.projectVTServer;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 
 /**
  * Created by Jay on 3/14/14.
@@ -21,24 +28,35 @@ public class resultActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result);
 
-        int vitamenRate = 1000;
-        Bundle extra = getIntent().getExtras();
-        int vitamenA = extra.getInt("vitamenA");
-        CharSequence resultChar;
+        //ImageView loadingImgage = (ImageView) findViewById(R.id.loadingImage);
+        //loadingImgage.setImageResource(R.drawable.loader);
 
-        if(vitamenA != 0){
-            int resultVitamenA = vitamenRate - vitamenA;
-            if(resultVitamenA > 0){
-                resultChar = "GO TAKE MORE VITAMEN A!!!!!!!!!!!!!! FUCKER~";
-            }else{
-                resultChar = "GO TAKE OTHER VITAMEN INSTANT OF A!!!!!! FATTY";
-            }
-        }else{
-            resultChar = "FUCKER!! ENTER A NUMBER.";
+        Bundle extra = getIntent().getExtras();
+        String foodList = extra.getString("foodList");
+        String gender = extra.getString("gender");
+        String vitaminChar = "";
+        projectVTServer server = new projectVTServer();
+        try{
+            JSONObject resultJSON = server.execute("food/getVitaminDailyResult/?foodList=" + foodList + "&gender=" + gender).get();
+            vitaminChar += vitaminResultString(resultJSON, "a");
+            vitaminChar += vitaminResultString(resultJSON, "b1");
+            vitaminChar += vitaminResultString(resultJSON, "b2");
+            vitaminChar += vitaminResultString(resultJSON, "b3");
+            vitaminChar += vitaminResultString(resultJSON, "b6");
+            vitaminChar += vitaminResultString(resultJSON, "b12");
+            vitaminChar += vitaminResultString(resultJSON, "c");
+            vitaminChar += vitaminResultString(resultJSON, "d");
+            vitaminChar += vitaminResultString(resultJSON, "e");
+            vitaminChar += vitaminResultString(resultJSON, "k");
+        }catch(Exception e){
+            Log.e("Server call exception", "exception", e);
         }
 
+
+
+
         TextView resultText = (TextView) findViewById(R.id.resultText);
-        resultText.setText(resultChar);
+        resultText.setText(vitaminChar);
 
         //Listener
         backListener = new View.OnClickListener() {
@@ -50,6 +68,20 @@ public class resultActivity extends Activity {
 
         backButton = (Button) findViewById(R.id.resultBackButton);
         backButton.setOnClickListener(backListener);
+    }
+
+    DecimalFormat df = new DecimalFormat("#.##");
+    private String vitaminResultString(JSONObject vitamin, String name){
+        String vitaminString = "";
+
+        try{
+            if(vitamin.get(name) != null && vitamin.getInt(name) != 0 && vitamin.getInt(name) > 0){
+                vitaminString = " " + name.toUpperCase() + ": " + df.format(vitamin.getDouble(name));
+            }
+        }catch(JSONException e){
+            Log.e("JSONException", "Exception", e);
+        }
+        return vitaminString;
     }
 
     @Override
