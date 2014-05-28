@@ -3,4 +3,10 @@
     <color name="menuLayout">#FFE7BA</color>
     <color name="buttonTextAvaliable">#FFE7BA</color>
     <color name="buttonBackground">#2F4F4F</color>
+    <color name="background">#FFFFFF</color>
+    <color name="text">#616161</color>
+    <color name="boxBackground">#F2F2F2</color>
+
+
+
 </resources>

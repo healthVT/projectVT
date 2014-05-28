@@ -14,6 +14,7 @@ import com.example.projectVT.sqlite.model.DatabaseHelper;
 import com.example.projectVT.util.projectVTServer;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.google.android.gms.common.*;
 
 public class mainActivity extends Activity {
     /**
@@ -244,7 +245,8 @@ public class mainActivity extends Activity {
             ));
 
             foodInput.setText("");
-            vitaminList.addView(eachText, 0);
+
+            //vitaminList.addView(eachText, 0);
 
             String amount = getAmountInString(amountSpinner.getSelectedItem().toString());
             String common = "";

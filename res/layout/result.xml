@@ -28,7 +28,6 @@
             android:layout_below="@+id/resultText"
             android:layout_marginTop="24dp"
             android:text="Back"
-            android:textSize="30dp"
             />
 
     <include layout="@layout/bottom_menu_template" />

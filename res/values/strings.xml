@@ -3,6 +3,9 @@
     <string name="app_name">projectVT</string>
     <string name="result_name">Vitamen Result</string>
 
+    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_revoke_access">Revoke Access</string>
+
     <string name="quality_prompt">Select Quality</string>
     <string-array name="quality">
         <item>1/4</item>
